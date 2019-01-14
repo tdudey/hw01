@@ -231,3 +231,68 @@ plot(X1, X2, xlab = "X1", ylab = "X2", col = ifelse(y_prob > .5, 'blue', 'orange
 
 ![](MACS301_HW1_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
 
+```r
+#(f) & (g) Incorporate Decision Boundary with a meaningful title and axes
+library(tidyverse)
+```
+
+```
+## ── Attaching packages ───────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✔ tibble  2.0.0     ✔ purrr   0.2.5
+## ✔ tidyr   0.8.2     ✔ dplyr   0.7.8
+## ✔ readr   1.3.1     ✔ stringr 1.3.1
+## ✔ tibble  2.0.0     ✔ forcats 0.3.0
+```
+
+```
+## ── Conflicts ──────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
+```r
+df <- data.frame(X1, X2, y_prob)
+boundary.X1 <- seq(-1, 1, by = .5)
+boundary.X2 <- seq(-1, 1, by = .5)
+grid <- expand.grid(X1 = boundary.X1, X2 = boundary.X2)
+grid
+```
+
+```
+##      X1   X2
+## 1  -1.0 -1.0
+## 2  -0.5 -1.0
+## 3   0.0 -1.0
+## 4   0.5 -1.0
+## 5   1.0 -1.0
+## 6  -1.0 -0.5
+## 7  -0.5 -0.5
+## 8   0.0 -0.5
+## 9   0.5 -0.5
+## 10  1.0 -0.5
+## 11 -1.0  0.0
+## 12 -0.5  0.0
+## 13  0.0  0.0
+## 14  0.5  0.0
+## 15  1.0  0.0
+## 16 -1.0  0.5
+## 17 -0.5  0.5
+## 18  0.0  0.5
+## 19  0.5  0.5
+## 20  1.0  0.5
+## 21 -1.0  1.0
+## 22 -0.5  1.0
+## 23  0.0  1.0
+## 24  0.5  1.0
+## 25  1.0  1.0
+```
+
+```r
+grid <- mutate(grid, y = X1 + X1^2 + X2 + X2^2, z = exp(y)/(1 + exp(y)), upper = z > .5)
+ggplot(grid, aes(X1, X2)) + geom_contour(aes(z = z, group = upper), bins = .5) + geom_point(data = df, aes(color = ifelse(y_prob > .5, 'success', 'failure'))) + labs(title = "Bayes Classifier")
+```
+
+![](MACS301_HW1_files/figure-html/unnamed-chunk-2-2.png)<!-- -->

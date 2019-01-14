@@ -30,9 +30,14 @@ plot
 #(f) Bayes decision boundary
 library(tidyverse)
 df <- data.frame(X1, X2, y_prob)
-boundary.X1 <- seq(-1, 1, by = .05)
-boundary.X2 <- seq(-1, 1, by = .05)
+boundary.X1 <- seq(-1, 1, by = .5)
+boundary.X2 <- seq(-1, 1, by = .5)
 grid <- expand.grid(X1 = boundary.X1, X2 = boundary.X2)
 grid
-grid <- mutate(grid, y = y, z = y_prob, upper = z > .5)
-        
+grid <- mutate(grid, y = X1 + X1^2 + X2 + X2^2, z = exp(y)/(1 + exp(y)), upper = z > .5)
+ggplot(grid, aes(X1, X2)) + geom_contour(aes(z = z, group = upper), bins = .5) + geom_point(data = df, aes(color = ifelse(y_prob > .5, 'success', 'failure'))) + labs(title = "Bayes Classifer")
+
+                                                                                            
+                                                                                            
+                                                                                            
+                                         
